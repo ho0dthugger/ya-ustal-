@@ -8,72 +8,66 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageAdmin">
 
-    <Grid>
-        <Label x:Name="Label1" Content="Добавление пользователей. Изменение данных пользователей."
-               HorizontalAlignment="Left" Height="30" Margin="48,6,0,0"
-               VerticalAlignment="Top"></Label>
-        <Label x:Name="Label2" Content="Имя нового пользователя" HorizontalAlignment="Left"
-               Height="40" Margin="48,46,0,0"
-               VerticalAlignment="Top"></Label>
-        <Label x:Name="Label3" Content="Введите пароль" HorizontalAlignment="Left" Height="30"
-               Margin="48,90,0,0"
-               VerticalAlignment="Top"></Label>
-        <Label x:Name="Label4" Content="Выберите роль пользователя" HorizontalAlignment="Left"
-               Height="30" Margin="48,135,0,0"
-               VerticalAlignment="Top"></Label>
-        <Label x:Name="Label5" Content="Фамилия" HorizontalAlignment="Left" Height="30"
-               Margin="48,180,0,0"
-               VerticalAlignment="Top"></Label>
-        <Label x:Name="Label6" Content="Имя" HorizontalAlignment="Left" Height="30"
-               Margin="300,180,0,0"
-               VerticalAlignment="Top"></Label>
-        <Label x:Name="Label7" Content="Отчество" HorizontalAlignment="Left" Height="30"
-               Margin="500,180,0,0"
-               VerticalAlignment="Top"></Label>
-        <TextBox x:Name="TextBox1" HorizontalAlignment="Left" Height="33" Width="250"
-                 Margin="248,46,0,0"
-                 TextWrapping="Wrap" VerticalAlignment="Top"></TextBox>
-        <TextBox x:Name="TextBox2" HorizontalAlignment="Left" Height="33" Width="250"
-                 Margin="248,90,0,0"
-                 TextWrapping="Wrap" VerticalAlignment="Top"></TextBox>
-        <TextBox x:Name="TextBox3" HorizontalAlignment="Left" Height="33" Width="150"
-                 Margin="120,180,0,0"
-                 TextWrapping="Wrap" VerticalAlignment="Top"></TextBox>
-        <TextBox x:Name="TextBox4" HorizontalAlignment="Left" Height="33" Width="150"
-                 Margin="340,180,0,0"
-                 TextWrapping="Wrap" VerticalAlignment="Top"></TextBox>
-        <TextBox x:Name="TextBox5" HorizontalAlignment="Left" Height="33" Width="150"
-                 Margin="570,180,0,0"
-                 TextWrapping="Wrap" VerticalAlignment="Top"></TextBox>
-        <ComboBox x:Name="typeRole" FontSize="14" HorizontalAlignment="Left" Height="33"
-                  Width="250"
-                  VerticalAlignment="Top" Margin="248,135,0,0" >
-        </ComboBox>
-        <Button x:Name="button3" Content="Добавить" HorizontalAlignment="Left" Height="30"
-                Width="90"
-                Margin="550,90,0,0" VerticalAlignment="Top" >
-        </Button>
-        <Button x:Name="button4" Content="Сохранить изменения" HorizontalAlignment="Left"
-                Height="30" Width="130"
-                Margin="550,140,0,0" VerticalAlignment="Top" >
-        </Button>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top"
-                    Margin="5,230,5,5">
-            <DataGrid Name ="GridUser" AutoGenerateColumns="False"
-                      Height="190" MaxWidth="750" ScrollViewer.CanContentScroll="True" >
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Width="*" Binding="{Binding ID}"/>
-                    <DataGridTextColumn Header="Фамилия" Width="*" Binding="{Binding surname}"/>
-                    <DataGridTextColumn Header="Имя" Width="*" Binding="{Binding name}"/>
-                    <DataGridTextColumn Header="Отчество" Width="*" Binding="{Binding othcestvo}"/>
-                    <DataGridTextColumn Header="Роль" Width="*" Binding="{Binding role2}"/>
-                    <DataGridTextColumn Header="Логин" Width="*" Binding="{Binding login}"/>
-                    <DataGridTextColumn Header="Пароль" Width="*" Binding="{Binding password}"/>
-                    <DataGridTextColumn Header="Кол-во вводов" Width="*" Binding="{Binding count}"/>
-                    <DataGridTextColumn Header="Активность" Width="*" Binding="{Binding active}"/>
-                    <DataGridTextColumn Header="Дата входа" Width="*" Binding="{Binding date}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </StackPanel>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Форма добавления нового пользователя -->
+        <GroupBox Grid.Row="0" Header="Добавить нового пользователя" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="ФИО:" Margin="5"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Margin="5" x:Name="txtFullName"/>
+
+                <Label Grid.Row="0" Grid.Column="2" Content="Логин:" Margin="5"/>
+                <TextBox Grid.Row="0" Grid.Column="3" Margin="5" x:Name="txtLogin"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Пароль:" Margin="5"/>
+                <PasswordBox Grid.Row="1" Grid.Column="1" Margin="5" x:Name="txtPassword"/>
+
+                <Label Grid.Row="1" Grid.Column="2" Content="Роль:" Margin="5"/>
+                <ComboBox Grid.Row="1" Grid.Column="3" Margin="5" x:Name="cmbRole" DisplayMemberPath="НазваниеРоли"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Блокировка:" Margin="5"/>
+                <CheckBox Grid.Row="2" Grid.Column="1" Margin="5" x:Name="chkBlocked" VerticalAlignment="Center"/>
+
+                <Button Grid.Row="3" Grid.ColumnSpan="4" Content="Добавить пользователя" 
+                        Margin="5" Height="30" Click="AddUser_Click"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Таблица пользователей -->
+        <DataGrid Grid.Row="1" x:Name="usersGrid" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Код" Binding="{Binding Код}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding ФИО}"/>
+                <DataGridTextColumn Header="Логин" Binding="{Binding Логин}"/>
+                <DataGridTextColumn Header="Пароль" Binding="{Binding Пароль}"/>
+                <DataGridTextColumn Header="Роль" Binding="{Binding Роли.НазваниеРоли}"/>
+                <DataGridCheckBoxColumn Header="Блокировка" Binding="{Binding Блокировка}"/>
+                <DataGridTextColumn Header="Попытки входа" Binding="{Binding ПопыткаВхода}"/>
+                <DataGridTextColumn Header="Последняя попытка" Binding="{Binding ПоследняяПопыткаВхода, StringFormat={}{0:dd.MM.yyyy HH:mm}}"/>
+                <DataGridTextColumn Header="Последняя успешная" Binding="{Binding ПоследняяУспПопыткаВхода, StringFormat={}{0:dd.MM.yyyy HH:mm}}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Кнопка сохранения -->
+        <Button Grid.Row="2" Content="Сохранить изменения" Height="30" Click="SaveChanges_Click"/>
     </Grid>
 </Page>

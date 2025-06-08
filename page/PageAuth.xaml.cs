@@ -25,13 +25,20 @@ namespace Тест.page
             {
                 var authWindow = Window.GetWindow(this) as AuthWindow;
                 Window mainWindow;
+                var user = dbContext.Пользователи.FirstOrDefault(u => u.Логин == username);
                 if (userRole == "Администратор")
                 {
                     mainWindow = new AdminWindow();
                 }
-                else 
+                else if (userRole == "Пользователь" && user.ПоследняяУспПопыткаВхода == null) 
                 {
-                    mainWindow = new TestWindow();
+                    mainWindow = new NewPasswordWindow();
+                    user.ПоследняяУспПопыткаВхода = DateTime.Now;
+                    dbContext.SaveChanges();
+                }
+                else
+                {
+                    mainWindow = new MainWindow();
                 }
 
                 mainWindow.Show();
@@ -69,11 +76,11 @@ namespace Тест.page
                     if (user.ПопыткаВхода >= 3)
                     {
                         user.Блокировка = true;
-                        txtStatus.Text = "2";
+                        txtStatus.Text = "Аккаунт заблокирован!";
                     }
                     else
                     {
-                        txtStatus.Text = "3";
+                        txtStatus.Text = $"Неверный логин или пароль! Осталось попыток: {3 - user.ПопыткаВхода}";
                     }
                     dbContext.SaveChanges();
                 }
@@ -93,7 +100,6 @@ namespace Тест.page
             if (user != null && !(bool)user.Блокировка && password == user.Пароль)
             {
                 user.ПопыткаВхода = 1;
-                user.ПоследняяУспПопыткаВхода = DateTime.Now;
                 dbContext.SaveChanges();
 
                 FrameApp.ТекущийПользователь = user;

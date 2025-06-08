@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище Modul3Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище TestModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -15,6 +15,32 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="Категории">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="int" Nullable="false" />
+          <Property Name="Название" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Клиенты">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="int" Nullable="false" />
+          <Property Name="КодНомера" Type="int" Nullable="false" />
+          <Property Name="КодПользователя" Type="int" Nullable="false" />
+          <Property Name="ДатаВьезда" Type="date" />
+          <Property Name="ДатаВыезда" Type="date" />
+        </EntityType>
+        <EntityType Name="Комнаты">
+          <Key>
+            <PropertyRef Name="Номер" />
+          </Key>
+          <Property Name="Номер" Type="int" Nullable="false" />
+          <Property Name="КодКатегории" Type="int" Nullable="false" />
+          <Property Name="КодЭтажа" Type="int" Nullable="false" />
+          <Property Name="КодСтатуса" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Пользователи">
           <Key>
             <PropertyRef Name="Код" />
@@ -23,10 +49,11 @@
           <Property Name="Логин" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Пароль" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Роль" Type="int" Nullable="false" />
-          <Property Name="Блокировка" Type="bit" Nullable="false" />
-          <Property Name="ПопыткаВхода" Type="int" Nullable="false" />
+          <Property Name="Блокировка" Type="bit" />
+          <Property Name="ПопыткаВхода" Type="int" />
           <Property Name="ПоследняяПопыткаВхода" Type="datetime" />
-          <Property Name="ТребуетсяСменаПароля" Type="bit" Nullable="false" />
+          <Property Name="ПоследняяУспПопыткаВхода" Type="datetime" />
+          <Property Name="ФИО" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="Роли">
           <Key>
@@ -35,6 +62,80 @@
           <Property Name="Код" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="НазваниеРоли" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Статусы">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="int" Nullable="false" />
+          <Property Name="Название" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Этажи">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="int" Nullable="false" />
+          <Property Name="Номер" Type="int" />
+        </EntityType>
+        <Association Name="FK_Клиенты_Комнаты">
+          <End Role="Комнаты" Type="Self.Комнаты" Multiplicity="1" />
+          <End Role="Клиенты" Type="Self.Клиенты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Комнаты">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="Клиенты">
+              <PropertyRef Name="КодНомера" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Клиенты_Пользователи">
+          <End Role="Пользователи" Type="Self.Пользователи" Multiplicity="1" />
+          <End Role="Клиенты" Type="Self.Клиенты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Пользователи">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="Клиенты">
+              <PropertyRef Name="КодПользователя" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Комнаты_Категории">
+          <End Role="Категории" Type="Self.Категории" Multiplicity="1" />
+          <End Role="Комнаты" Type="Self.Комнаты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Категории">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="Комнаты">
+              <PropertyRef Name="КодКатегории" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Комнаты_Статусы">
+          <End Role="Статусы" Type="Self.Статусы" Multiplicity="1" />
+          <End Role="Комнаты" Type="Self.Комнаты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Статусы">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="Комнаты">
+              <PropertyRef Name="КодСтатуса" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Комнаты_Этажи">
+          <End Role="Этажи" Type="Self.Этажи" Multiplicity="1" />
+          <End Role="Комнаты" Type="Self.Комнаты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Этажи">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="Комнаты">
+              <PropertyRef Name="КодЭтажа" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Пользователи_Роли">
           <End Role="Роли" Type="Self.Роли" Multiplicity="1" />
           <End Role="Пользователи" Type="Self.Пользователи" Multiplicity="*" />
@@ -47,10 +148,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Хранилище Modul3ModelContainer">
+        <EntityContainer Name="Хранилище TestModelContainer">
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Категории" EntityType="Self.Категории" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Клиенты" EntityType="Self.Клиенты" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Комнаты" EntityType="Self.Комнаты" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Пользователи" EntityType="Self.Пользователи" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Роли" EntityType="Self.Роли" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Статусы" EntityType="Self.Статусы" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Этажи" EntityType="Self.Этажи" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Клиенты_Комнаты" Association="Self.FK_Клиенты_Комнаты">
+            <End Role="Комнаты" EntitySet="Комнаты" />
+            <End Role="Клиенты" EntitySet="Клиенты" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Клиенты_Пользователи" Association="Self.FK_Клиенты_Пользователи">
+            <End Role="Пользователи" EntitySet="Пользователи" />
+            <End Role="Клиенты" EntitySet="Клиенты" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Комнаты_Категории" Association="Self.FK_Комнаты_Категории">
+            <End Role="Категории" EntitySet="Категории" />
+            <End Role="Комнаты" EntitySet="Комнаты" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Комнаты_Статусы" Association="Self.FK_Комнаты_Статусы">
+            <End Role="Статусы" EntitySet="Статусы" />
+            <End Role="Комнаты" EntitySet="Комнаты" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Комнаты_Этажи" Association="Self.FK_Комнаты_Этажи">
+            <End Role="Этажи" EntitySet="Этажи" />
+            <End Role="Комнаты" EntitySet="Комнаты" />
+          </AssociationSet>
           <AssociationSet Name="FK_Пользователи_Роли" Association="Self.FK_Пользователи_Роли">
             <End Role="Роли" EntitySet="Роли" />
             <End Role="Пользователи" EntitySet="Пользователи" />
@@ -60,7 +186,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="Modul3Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="TestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -71,6 +197,39 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
+        <EntityType Name="Категории">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="Int32" Nullable="false" />
+          <Property Name="Название" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Комнаты" Relationship="Self.FK_Комнаты_Категории" FromRole="Категории" ToRole="Комнаты" />
+        </EntityType>
+        <EntityType Name="Клиенты">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="Int32" Nullable="false" />
+          <Property Name="КодНомера" Type="Int32" Nullable="false" />
+          <Property Name="КодПользователя" Type="Int32" Nullable="false" />
+          <Property Name="ДатаВьезда" Type="DateTime" Precision="0" />
+          <Property Name="ДатаВыезда" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Комнаты" Relationship="Self.FK_Клиенты_Комнаты" FromRole="Клиенты" ToRole="Комнаты" />
+          <NavigationProperty Name="Пользователи" Relationship="Self.FK_Клиенты_Пользователи" FromRole="Клиенты" ToRole="Пользователи" />
+        </EntityType>
+        <EntityType Name="Комнаты">
+          <Key>
+            <PropertyRef Name="Номер" />
+          </Key>
+          <Property Name="Номер" Type="Int32" Nullable="false" />
+          <Property Name="КодКатегории" Type="Int32" Nullable="false" />
+          <Property Name="КодЭтажа" Type="Int32" Nullable="false" />
+          <Property Name="КодСтатуса" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Категории" Relationship="Self.FK_Комнаты_Категории" FromRole="Комнаты" ToRole="Категории" />
+          <NavigationProperty Name="Клиенты" Relationship="Self.FK_Клиенты_Комнаты" FromRole="Комнаты" ToRole="Клиенты" />
+          <NavigationProperty Name="Статусы" Relationship="Self.FK_Комнаты_Статусы" FromRole="Комнаты" ToRole="Статусы" />
+          <NavigationProperty Name="Этажи" Relationship="Self.FK_Комнаты_Этажи" FromRole="Комнаты" ToRole="Этажи" />
+        </EntityType>
         <EntityType Name="Пользователи">
           <Key>
             <PropertyRef Name="Код" />
@@ -79,10 +238,12 @@
           <Property Name="Логин" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Пароль" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Роль" Type="Int32" Nullable="false" />
-          <Property Name="Блокировка" Type="Boolean" Nullable="false" />
-          <Property Name="ПопыткаВхода" Type="Int32" Nullable="false" />
+          <Property Name="Блокировка" Type="Boolean" />
+          <Property Name="ПопыткаВхода" Type="Int32" />
           <Property Name="ПоследняяПопыткаВхода" Type="DateTime" Precision="3" />
-          <Property Name="ТребуетсяСменаПароля" Type="Boolean" Nullable="false" />
+          <Property Name="ПоследняяУспПопыткаВхода" Type="DateTime" Precision="3" />
+          <Property Name="ФИО" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Клиенты" Relationship="Self.FK_Клиенты_Пользователи" FromRole="Пользователи" ToRole="Клиенты" />
           <NavigationProperty Name="Роли" Relationship="Self.FK_Пользователи_Роли" FromRole="Пользователи" ToRole="Роли" />
         </EntityType>
         <EntityType Name="Роли">
@@ -93,6 +254,82 @@
           <Property Name="НазваниеРоли" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Пользователи" Relationship="Self.FK_Пользователи_Роли" FromRole="Роли" ToRole="Пользователи" />
         </EntityType>
+        <EntityType Name="Статусы">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="Int32" Nullable="false" />
+          <Property Name="Название" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Комнаты" Relationship="Self.FK_Комнаты_Статусы" FromRole="Статусы" ToRole="Комнаты" />
+        </EntityType>
+        <EntityType Name="Этажи">
+          <Key>
+            <PropertyRef Name="Код" />
+          </Key>
+          <Property Name="Код" Type="Int32" Nullable="false" />
+          <Property Name="Номер" Type="Int32" />
+          <NavigationProperty Name="Комнаты" Relationship="Self.FK_Комнаты_Этажи" FromRole="Этажи" ToRole="Комнаты" />
+        </EntityType>
+        <Association Name="FK_Комнаты_Категории">
+          <End Role="Категории" Type="Self.Категории" Multiplicity="1" />
+          <End Role="Комнаты" Type="Self.Комнаты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Категории">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="Комнаты">
+              <PropertyRef Name="КодКатегории" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Клиенты_Комнаты">
+          <End Role="Комнаты" Type="Self.Комнаты" Multiplicity="1" />
+          <End Role="Клиенты" Type="Self.Клиенты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Комнаты">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="Клиенты">
+              <PropertyRef Name="КодНомера" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Клиенты_Пользователи">
+          <End Role="Пользователи" Type="Self.Пользователи" Multiplicity="1" />
+          <End Role="Клиенты" Type="Self.Клиенты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Пользователи">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="Клиенты">
+              <PropertyRef Name="КодПользователя" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Комнаты_Статусы">
+          <End Role="Статусы" Type="Self.Статусы" Multiplicity="1" />
+          <End Role="Комнаты" Type="Self.Комнаты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Статусы">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="Комнаты">
+              <PropertyRef Name="КодСтатуса" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Комнаты_Этажи">
+          <End Role="Этажи" Type="Self.Этажи" Multiplicity="1" />
+          <End Role="Комнаты" Type="Self.Комнаты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Этажи">
+              <PropertyRef Name="Код" />
+            </Principal>
+            <Dependent Role="Комнаты">
+              <PropertyRef Name="КодЭтажа" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Пользователи_Роли">
           <End Role="Роли" Type="Self.Роли" Multiplicity="1" />
           <End Role="Пользователи" Type="Self.Пользователи" Multiplicity="*" />
@@ -105,10 +342,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Modul3Entities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="TestEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Категории" EntityType="Self.Категории" />
+          <EntitySet Name="Клиенты" EntityType="Self.Клиенты" />
+          <EntitySet Name="Комнаты" EntityType="Self.Комнаты" />
           <EntitySet Name="Пользователи" EntityType="Self.Пользователи" />
           <EntitySet Name="Роли" EntityType="Self.Роли" />
+          <EntitySet Name="Статусы" EntityType="Self.Статусы" />
+          <EntitySet Name="Этажи" EntityType="Self.Этажи" />
+          <AssociationSet Name="FK_Комнаты_Категории" Association="Self.FK_Комнаты_Категории">
+            <End Role="Категории" EntitySet="Категории" />
+            <End Role="Комнаты" EntitySet="Комнаты" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Клиенты_Комнаты" Association="Self.FK_Клиенты_Комнаты">
+            <End Role="Комнаты" EntitySet="Комнаты" />
+            <End Role="Клиенты" EntitySet="Клиенты" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Клиенты_Пользователи" Association="Self.FK_Клиенты_Пользователи">
+            <End Role="Пользователи" EntitySet="Пользователи" />
+            <End Role="Клиенты" EntitySet="Клиенты" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Комнаты_Статусы" Association="Self.FK_Комнаты_Статусы">
+            <End Role="Статусы" EntitySet="Статусы" />
+            <End Role="Комнаты" EntitySet="Комнаты" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Комнаты_Этажи" Association="Self.FK_Комнаты_Этажи">
+            <End Role="Этажи" EntitySet="Этажи" />
+            <End Role="Комнаты" EntitySet="Комнаты" />
+          </AssociationSet>
           <AssociationSet Name="FK_Пользователи_Роли" Association="Self.FK_Пользователи_Роли">
             <End Role="Роли" EntitySet="Роли" />
             <End Role="Пользователи" EntitySet="Пользователи" />
@@ -119,9 +381,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище Modul3ModelContainer" CdmEntityContainer="Modul3Entities">
+        <EntityContainerMapping StorageEntityContainer="Хранилище TestModelContainer" CdmEntityContainer="TestEntities">
           <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="Modul3Model.sysdiagrams">
+            <EntityTypeMapping TypeName="TestModel.sysdiagrams">
               <MappingFragment StoreEntitySet="sysdiagrams">
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
@@ -131,8 +393,37 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Категории">
+            <EntityTypeMapping TypeName="TestModel.Категории">
+              <MappingFragment StoreEntitySet="Категории">
+                <ScalarProperty Name="Код" ColumnName="Код" />
+                <ScalarProperty Name="Название" ColumnName="Название" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Клиенты">
+            <EntityTypeMapping TypeName="TestModel.Клиенты">
+              <MappingFragment StoreEntitySet="Клиенты">
+                <ScalarProperty Name="Код" ColumnName="Код" />
+                <ScalarProperty Name="КодНомера" ColumnName="КодНомера" />
+                <ScalarProperty Name="КодПользователя" ColumnName="КодПользователя" />
+                <ScalarProperty Name="ДатаВьезда" ColumnName="ДатаВьезда" />
+                <ScalarProperty Name="ДатаВыезда" ColumnName="ДатаВыезда" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Комнаты">
+            <EntityTypeMapping TypeName="TestModel.Комнаты">
+              <MappingFragment StoreEntitySet="Комнаты">
+                <ScalarProperty Name="Номер" ColumnName="Номер" />
+                <ScalarProperty Name="КодКатегории" ColumnName="КодКатегории" />
+                <ScalarProperty Name="КодЭтажа" ColumnName="КодЭтажа" />
+                <ScalarProperty Name="КодСтатуса" ColumnName="КодСтатуса" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Пользователи">
-            <EntityTypeMapping TypeName="Modul3Model.Пользователи">
+            <EntityTypeMapping TypeName="TestModel.Пользователи">
               <MappingFragment StoreEntitySet="Пользователи">
                 <ScalarProperty Name="Код" ColumnName="Код" />
                 <ScalarProperty Name="Логин" ColumnName="Логин" />
@@ -141,15 +432,32 @@
                 <ScalarProperty Name="Блокировка" ColumnName="Блокировка" />
                 <ScalarProperty Name="ПопыткаВхода" ColumnName="ПопыткаВхода" />
                 <ScalarProperty Name="ПоследняяПопыткаВхода" ColumnName="ПоследняяПопыткаВхода" />
-                <ScalarProperty Name="ТребуетсяСменаПароля" ColumnName="ТребуетсяСменаПароля" />
+                <ScalarProperty Name="ПоследняяУспПопыткаВхода" ColumnName="ПоследняяУспПопыткаВхода" />
+                <ScalarProperty Name="ФИО" ColumnName="ФИО" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Роли">
-            <EntityTypeMapping TypeName="Modul3Model.Роли">
+            <EntityTypeMapping TypeName="TestModel.Роли">
               <MappingFragment StoreEntitySet="Роли">
                 <ScalarProperty Name="Код" ColumnName="Код" />
                 <ScalarProperty Name="НазваниеРоли" ColumnName="НазваниеРоли" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Статусы">
+            <EntityTypeMapping TypeName="TestModel.Статусы">
+              <MappingFragment StoreEntitySet="Статусы">
+                <ScalarProperty Name="Код" ColumnName="Код" />
+                <ScalarProperty Name="Название" ColumnName="Название" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Этажи">
+            <EntityTypeMapping TypeName="TestModel.Этажи">
+              <MappingFragment StoreEntitySet="Этажи">
+                <ScalarProperty Name="Код" ColumnName="Код" />
+                <ScalarProperty Name="Номер" ColumnName="Номер" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

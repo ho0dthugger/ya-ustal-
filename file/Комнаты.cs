@@ -12,26 +12,23 @@ namespace Тест.file
     using System;
     using System.Collections.Generic;
     
-    public partial class Пользователи
+    public partial class Комнаты
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Пользователи()
+        public Комнаты()
         {
             this.Клиенты = new HashSet<Клиенты>();
         }
     
-        public int Код { get; set; }
-        public string Логин { get; set; }
-        public string Пароль { get; set; }
-        public int Роль { get; set; }
-        public Nullable<bool> Блокировка { get; set; }
-        public Nullable<int> ПопыткаВхода { get; set; }
-        public Nullable<System.DateTime> ПоследняяПопыткаВхода { get; set; }
-        public Nullable<System.DateTime> ПоследняяУспПопыткаВхода { get; set; }
-        public string ФИО { get; set; }
+        public int Номер { get; set; }
+        public int КодКатегории { get; set; }
+        public int КодЭтажа { get; set; }
+        public int КодСтатуса { get; set; }
     
+        public virtual Категории Категории { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Клиенты> Клиенты { get; set; }
-        public virtual Роли Роли { get; set; }
+        public virtual Статусы Статусы { get; set; }
+        public virtual Этажи Этажи { get; set; }
     }
 }

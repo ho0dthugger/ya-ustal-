@@ -13,10 +13,10 @@ namespace Тест.file
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Modul3Entities : DbContext
+    public partial class TestEntities : DbContext
     {
-        public Modul3Entities()
-            : base("name=Modul3Entities")
+        public TestEntities()
+            : base("name=TestEntities")
         {
         }
     
@@ -26,7 +26,12 @@ namespace Тест.file
         }
     
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<Категории> Категории { get; set; }
+        public virtual DbSet<Клиенты> Клиенты { get; set; }
+        public virtual DbSet<Комнаты> Комнаты { get; set; }
         public virtual DbSet<Пользователи> Пользователи { get; set; }
         public virtual DbSet<Роли> Роли { get; set; }
+        public virtual DbSet<Статусы> Статусы { get; set; }
+        public virtual DbSet<Этажи> Этажи { get; set; }
     }
 }
