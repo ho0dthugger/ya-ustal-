@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Тест"
         mc:Ignorable="d"
-        Title="AdminWindow" Height="450" Width="800">
+        Title="AdminWindow" MinHeight="450" MinWidth="850" Width="1000">
     <Grid>
         <Frame x:Name="frm" NavigationUIVisibility="Hidden"/>
     </Grid>

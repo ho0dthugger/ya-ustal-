@@ -55,15 +55,15 @@
         <!-- Таблица пользователей -->
         <DataGrid Grid.Row="1" x:Name="usersGrid" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Код" Binding="{Binding Код}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="ФИО" Binding="{Binding ФИО}"/>
-                <DataGridTextColumn Header="Логин" Binding="{Binding Логин}"/>
-                <DataGridTextColumn Header="Пароль" Binding="{Binding Пароль}"/>
-                <DataGridTextColumn Header="Роль" Binding="{Binding Роли.НазваниеРоли}"/>
-                <DataGridCheckBoxColumn Header="Блокировка" Binding="{Binding Блокировка}"/>
-                <DataGridTextColumn Header="Попытки входа" Binding="{Binding ПопыткаВхода}"/>
-                <DataGridTextColumn Header="Последняя попытка" Binding="{Binding ПоследняяПопыткаВхода, StringFormat={}{0:dd.MM.yyyy HH:mm}}"/>
-                <DataGridTextColumn Header="Последняя успешная" Binding="{Binding ПоследняяУспПопыткаВхода, StringFormat={}{0:dd.MM.yyyy HH:mm}}"/>
+                <DataGridTextColumn Header="Код" Binding="{Binding Код}" IsReadOnly="True" Width="auto"/>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding ФИО}" Width="auto"/>
+                <DataGridTextColumn Header="Логин" Binding="{Binding Логин}" Width="auto"/>
+                <DataGridTextColumn Header="Пароль" Binding="{Binding Пароль}" Width="auto"/>
+                <DataGridTextColumn Header="Роль" Binding="{Binding Роли.НазваниеРоли}" Width="auto"/>
+                <DataGridCheckBoxColumn Header="Блокировка" Binding="{Binding Блокировка}" Width="auto"/>
+                <DataGridTextColumn Header="Попытки входа" Binding="{Binding ПопыткаВхода}" Width="auto"/>
+                <DataGridTextColumn Header="Последняя попытка" Binding="{Binding ПоследняяПопыткаВхода, StringFormat={}{0:dd.MM.yyyy HH:mm}}" Width="auto"/>
+                <DataGridTextColumn Header="Последняя успешная" Binding="{Binding ПоследняяУспПопыткаВхода, StringFormat={}{0:dd.MM.yyyy HH:mm}}" Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
 
